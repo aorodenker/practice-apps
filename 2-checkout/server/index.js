@@ -6,7 +6,7 @@ const logger = require("./middleware/logger");
 const db = require("./db");
 const app = express();
 const cors = require('cors');
-const method = require('./serverMethods.js');
+const models = require('./models.js');
 
 
 app.use(cors());
@@ -21,11 +21,12 @@ app.use(express.static(path.join(__dirname, "../client/dist")));
 
 //get user info
 app.get('/checkout', (req, res) => {
-  //get stuff
+  models.userFind(req.body, res)
 });
 
 //create new user
 app.post('/checkout', (req, res) => {
+  models.userInsert(req.body, res)
   //send stuff
 });
 

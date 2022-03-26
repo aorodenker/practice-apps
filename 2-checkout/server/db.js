@@ -23,5 +23,6 @@ db.queryAsync(
   )
   .catch((err) => console.log('Error connecting to MySQL: ', err));
 
-const con = mysql.connection;
-module.exports = db
+
+
+module.exports = {connection}

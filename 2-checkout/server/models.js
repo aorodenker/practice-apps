@@ -1,27 +1,34 @@
 const mysql = require("mysql2");
-const express = require("express"); //maybe dont need
-const app = express(); //maybe dont need
-require("dotenv").config();
+const {connection} = require('./db.js');
 
 
-const con = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASS,
-  database: process.env.DB_NAME,
-});
 
-//insert user
-// let userInsert = con.query(
-//   'INSERT INTO userData (name, username, password, email) VALUES (?, ?, ?, ?',
-//   [name, username, password, email], (err, data) => {
-//     if (err) {
-//       res.status(500).send(err)
-//     } else {
-//       res.status(200).send('Inserted user info successfully')
-//     }
-//   }
-// );
+  //insert a user
+  let userInsert = (body, res) => {
+    connection.query(
+    'INSERT INTO userData (name, username, password, email, lineOne, lineTwo, city, state, zip, phone, ccNum, exp, cvv, billZip) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+    [body.data[0], body.data[1], body.data[2], body.data[3], body.data[4], body.data[5], body.data[6], body.data[7], body.data[8], body.data[9], body.data[10], body.data[11], body.data[12], body.data[13]], (err, data) => {
+      if (err) {
+        res.status(500).send(err)
+      } else {
+        res.status(200).send('Inserted user info successfully:' + body[0])
+      }
+    })
+  };
+  //get single user data
+  let userFind = (body, res) => {
+    console.log(body)
+    //destructure body first here
+    //
+    //get name
+    connection.query('SELECT * FROM userData WHERE name = ? LIMIT 1', [body.name], (err, data) => {
+      if (err) {
+        res.status(500).send('Error selecting user: '+ name)
+      } else {
+        res.status(200).send('Successfully found user: '+ JSON.stringify(data))
+      }
+    })
+  };
 
 // //insert address
 // let addressInsert = con.query(
@@ -115,3 +122,4 @@ const con = mysql.createConnection({
 //     }
 //   }
 // );
+module.exports = {userInsert, userFind}
